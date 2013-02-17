@@ -1,0 +1,16 @@
+{
+    "version": "0.1.0",
+    "name": "yui-couchdb",
+    "description": "YUI CouchDB",
+    "dependencies": {
+        "yui": "~3.8.1",
+        "cradle": "~0.6.4"
+    },
+    "devDependencies": {
+      "grunt": "~0.4.0",
+      "grunt-contrib-watch": "~0.2.0",
+      "grunt-contrib-jasmine": "~0.3.0",
+      "grunt-cli": "~0.1.6"
+    },
+    "main": "./index.js"
+}
