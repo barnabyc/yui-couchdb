@@ -39,6 +39,7 @@ YUI.add('model-sync-couchdb', function(Y) {
       this.sync('create', options, function (err, res) {
         if (err) {
           Y.log('Error creating: ' + err, 'error', this.constructor.NAME);
+          Y.log('res: '+JSON.stringify( res), 'debug', this.constructor.NAME);
 
         } else {
           callback && callback( res );
@@ -47,7 +48,8 @@ YUI.add('model-sync-couchdb', function(Y) {
     },
 
     sync: function (action, options, callback) {
-      if ( !this._connect() ) return;
+      // todo handle failure
+      this._connect();
 
       if (action === 'create') {
         this._createDocument(options, callback);
@@ -154,7 +156,7 @@ YUI.add('model-sync-couchdb', function(Y) {
       }
 
       this._conn = new(cradle.Connection);
-      this._db   = conn.database(
+      this._db   = this._conn.database(
                      this.databaseName
                    );
 
