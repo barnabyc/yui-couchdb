@@ -8,7 +8,7 @@ YUI.add('model-sync-couchdb', function(Y) {
   CouchDBSync.CREATE_MISSING_DB = false;
   CouchDBSync._NON_ATTRS_CFG = [
     "setup", // Cradle Setup
-    "databaseName",
+    "databaseName", "designDocument"
     "_db", "_conn"
   ];
 
@@ -22,6 +22,8 @@ YUI.add('model-sync-couchdb', function(Y) {
     },
 
     databaseName: '',
+
+    designDocument: null,
 
     _db: null,
     _conn: null,
@@ -187,10 +189,10 @@ YUI.add('model-sync-couchdb', function(Y) {
     },
 
     _createDesignDocument: function () {
-      if (this._designDocument) {
+      if (this.designDocument) {
         db.save(
           '_design/' + this.constructor.NAME,
-          this._designDocument
+          this.designDocument
         );
       }
     }
