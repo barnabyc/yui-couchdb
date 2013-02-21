@@ -1,32 +1,26 @@
-// read.js
-YUI.add('specs:model-sync-couchdb:read', function (Y) {
+// create.js
+var cradle = require('cradle');
+var YUI = require('yui').use(
+  'model',
+  'model-list',
+  'model-sync-couchdb'
+);
 
-  var cradle = require('cradle');
+describe('read', function () {
 
-  describe('read', function () {
+  var subject;
 
-    var subject;
-
-    describe('a single document', function () {
-
-    });
-
-    describe('a list of documents', function () {
-
-    });
-
-    describe('a view', function () {
-
-    });
+  describe('a single document', function () {
 
   });
 
-},
-'0.0.1',
-{
-  requires: [
-    'model',
-    'model-list',
-    'model-sync-couchdb'
-  ]
+  describe('a list of documents', function () {
+
+  });
+
+  describe('a view', function () {
+
+  });
+
 });
+
