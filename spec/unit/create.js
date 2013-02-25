@@ -1,17 +1,7 @@
-var YUI = require('yui').YUI;
-    // mod = require('yui-couchdb');
-
-YUI({
-  modules: {
-    'model-sync-couchdb': {
-        requires: [ 'model' ],
-        path: 'module.js'
-    }
-  }
-}).use( 'model-sync-couchdb', 'model', 'model-list', function(Y) {
+require('yui').YUI.add('specs:model-sync-couchdb:create', function(Y) {
 
   describe('create', function () {
-    
+
     var subject,
         Kitten = Y.Base.create('kitten',
           Y.Model,
@@ -88,4 +78,11 @@ YUI({
 
   });
 
+},
+'0.1.0',
+{
+  requires: [
+    'model',
+    // 'model-sync-couchdb'
+  ]
 });
