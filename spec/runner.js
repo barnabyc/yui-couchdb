@@ -1,3 +1,5 @@
+console.log('runner, 1');
+
 require('yui').YUI({
   useSync: true,
   modules: {
@@ -11,6 +13,10 @@ require('yui').YUI({
   }
 }).use('specs:model-sync-couchdb:create', function (Y) {
 
+  console.log('runner, 2');
+
   Y.log('kittens','debug',this.constructor.NAME);
 
 });
+
+console.log('runner, 3');

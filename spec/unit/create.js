@@ -1,6 +1,12 @@
-require('yui').YUI.add('specs:model-sync-couchdb:create', function(Y) {
+console.log('create, 1');
+
+require('yui').getInstance().add('specs:model-sync-couchdb:create', function(Y) {
+
+  console.log('create, 2');
 
   describe('create', function () {
+
+    console.log('create, 3');
 
     var subject,
         Kitten = Y.Base.create('kitten',
@@ -44,7 +50,7 @@ require('yui').YUI.add('specs:model-sync-couchdb:create', function(Y) {
       });
     });
 
-    describe('a list of documents', function () {
+    xdescribe('a list of documents', function () {
       beforeEach(function () {
 
         subject = new KittenList({
@@ -71,7 +77,7 @@ require('yui').YUI.add('specs:model-sync-couchdb:create', function(Y) {
 
       });
 
-      it('creates a list of documents', function () {
+      xit('creates a list of documents', function () {
 
       });
     });
@@ -83,6 +89,6 @@ require('yui').YUI.add('specs:model-sync-couchdb:create', function(Y) {
 {
   requires: [
     'model',
-    // 'model-sync-couchdb'
+    'model-sync-couchdb'
   ]
 });
