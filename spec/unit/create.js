@@ -1,6 +1,8 @@
 console.log('create, 1');
 
-require('yui').getInstance().add('specs:model-sync-couchdb:create', function(Y) {
+var YUI = require('yui').YUI;
+
+YUI.add('specs:model-sync-couchdb:create', function(Y) {
 
   console.log('create, 2');
 
@@ -91,4 +93,26 @@ require('yui').getInstance().add('specs:model-sync-couchdb:create', function(Y) 
     'model',
     'model-sync-couchdb'
   ]
+});
+
+
+
+
+YUI({
+  useSync:true,
+  modules:{
+    'model-sync-couchdb': {
+      fullpath: require('path').join(__dirname, 'module.js'),
+      requis: [
+        'model'
+      ],
+      type: 'js'
+    }
+  }
+}).use('specs:model-sync-couchdb:create', function (Y) {
+
+  console.log('runner, 2');
+
+  Y.log('kittens','debug',this.constructor.NAME);
+
 });

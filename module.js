@@ -1,4 +1,8 @@
+console.log('module, 1');
+
 YUI.add('model-sync-couchdb', function(Y) {
+
+  console.log('module, 2');
 
   var cradle = require('cradle');
 
@@ -63,13 +67,13 @@ YUI.add('model-sync-couchdb', function(Y) {
         } else {
           this._fetchDocument(options, callback);
         }
-        
+
       } else if (action === 'update') {
         // todo
-        
+
       } else if (action === 'delete') {
         this._deleteDocument(options, callback);
-        
+
       }
 
     },
@@ -201,9 +205,9 @@ YUI.add('model-sync-couchdb', function(Y) {
 
   Y.namespace('ModelSync').CouchDB = CouchDBSync;
 
-}, 
-'0.1.0', 
-{ 
+},
+'0.1.0',
+{
   requires: [
     'model'
   ]

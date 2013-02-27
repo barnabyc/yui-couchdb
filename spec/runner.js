@@ -3,10 +3,22 @@ console.log('runner, 1');
 require('yui').YUI({
   useSync: true,
   modules: {
-    'model-sync-couchdb': require('module'),
+    'model-sync-couchdb': {
+      fullpath: require('path').join(__dirname, 'module.js'),
+      requis: [
+        'model'
+      ],
+      type: 'js'
+    },
 
     // todo use dynamic groups
-    'specs:model-sync-couchdb:create': require('/Users/barnaby/Source/barnabyc/yui-couchdb/spec/unit/create.js')
+    'specs:model-sync-couchdb:create': {
+      fullpath: require('path').join(__dirname, 'spec/unit/create.js'),
+      requis: [
+        'model', 'model-sync-couchdb'
+      ],
+      type: 'js'
+    }
     // 'specs:model-sync-couchdb:read'  : require('/spec/unit/read'),
     // 'specs:model-sync-couchdb:update': require('/spec/unit/update'),
     // 'specs:model-sync-couchdb:delete': require('/spec/unit/delete')
