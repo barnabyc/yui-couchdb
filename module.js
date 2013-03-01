@@ -1,10 +1,12 @@
 console.log('module, 1');
 
-YUI.add('model-sync-couchdb', function(Y) {
+YUI.add('model-sync-couchdb', function (Y) {
 
   console.log('module, 2');
 
   var cradle = require('cradle');
+
+  console.log('module, 3');
 
   function CouchDBSync () {};
 
@@ -12,7 +14,7 @@ YUI.add('model-sync-couchdb', function(Y) {
   CouchDBSync.CREATE_MISSING_DB = false;
   CouchDBSync._NON_ATTRS_CFG = [
     "setup", // Cradle Setup
-    "databaseName", "designDocument"
+    "databaseName", "designDocument",
     "_db", "_conn"
   ];
 
