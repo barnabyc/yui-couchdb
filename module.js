@@ -11,7 +11,7 @@ YUI.add('model-sync-couchdb', function (Y) {
   function CouchDBSync () {};
 
   CouchDBSync.ALL_VIEW_NAME = 'all';
-  CouchDBSync.CREATE_MISSING_DB = false;
+  CouchDBSync.CREATE_MISSING_DB = true;
   CouchDBSync._NON_ATTRS_CFG = [
     "setup", // Cradle Setup
     "databaseName", "designDocument",

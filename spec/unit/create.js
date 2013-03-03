@@ -7,11 +7,11 @@ require('yui').getInstance().applyConfig({
   }
 });
 
-var Y = require('yui').use('model-sync-couchdb');
+var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 
 console.log('create, 2');
 
-describe('create', function () {
+describe('creation', function () {
 
   console.log('create, 3');
 
@@ -36,7 +36,7 @@ describe('create', function () {
 
   console.log('create, 4');
 
-  describe('a single document', function () {
+  describe('of a single document', function () {
     beforeEach(function () {
 
       subject = new Kitten({
@@ -46,13 +46,24 @@ describe('create', function () {
       });
 
       spyOn( subject, '_createDocument' ).andCallThrough();
-      spyOn( subject._db, 'save' );
+      // spyOn( subject._db, 'save' );
+
+      subject.save();
     });
 
-    it('creates a single document', function () {
-      subject.save();
-
+    it('calls `_createDocument`', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
+    });
+
+    it('has establishes a valid connection', function () {
+      expect( subject._conn ).not.toBe( null );
+    });
+
+    it('has a valid database', function () {
+      expect( subject._db ).not.toBe( null );
+    });
+
+    xit('was successful', function () {
       expect( subject._db.save ).toHaveBeenCalledWith({
         name  : 'Whiskers',
         gender: 'male',
@@ -61,7 +72,7 @@ describe('create', function () {
     });
   });
 
-  xdescribe('a list of documents', function () {
+  xdescribe('of a list of documents', function () {
     beforeEach(function () {
 
       subject = new KittenList({
