@@ -110,7 +110,7 @@ YUI.add('model-sync-couchdb', function (Y) {
             Y.log('Error saving document: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( res );
+            callback && callback( err, res );
           }
         }
       );
@@ -163,8 +163,8 @@ YUI.add('model-sync-couchdb', function (Y) {
         return false;
       }
 
-      this._conn = new(cradle.Connection);
-      this._db   = this._conn.database(
+      this._conn = this._conn || new(cradle.Connection);
+      this._db   = this._db   || this._conn.database(
                      this.databaseName
                    );
 
@@ -176,10 +176,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         if (err) {
           Y.log('Error verifying existence: ' + err, 'error', this.constructor.NAME);
 
-        } else if (exists) {
-          Y.log('Database exists: ' + this.databaseName, 'info', this.constructor.NAME);
-
-        } else {
+        } else if (!exists) {
           Y.log('Database does not exist: ' + this.databaseName, 'info', this.constructor.NAME);
 
           this._createDatabase();

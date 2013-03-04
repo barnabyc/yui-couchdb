@@ -46,7 +46,6 @@ describe('creation', function () {
       });
 
       spyOn( subject, '_createDocument' ).andCallThrough();
-      // spyOn( subject._db, 'save' );
 
       subject.save();
     });
@@ -63,7 +62,11 @@ describe('creation', function () {
       expect( subject._db ).not.toBe( null );
     });
 
-    xit('was successful', function () {
+    it('calls database.save from create document method', function () {
+      spyOn( subject._db, 'save' );
+
+      subject.save();
+
       expect( subject._db.save ).toHaveBeenCalledWith({
         name  : 'Whiskers',
         gender: 'male',
