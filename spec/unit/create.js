@@ -10,7 +10,8 @@ require('yui').getInstance().applyConfig({
 var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 
 console.log('create, 2');
-
+// @todo change databasenames dynamically during tests
+// @todo cleanup after tests
 describe('creation', function () {
 
   console.log('create, 3');
@@ -54,7 +55,7 @@ describe('creation', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
     });
 
-    it('has establishes a valid connection', function () {
+    it('has a valid connection', function () {
       expect( subject._conn ).not.toBe( null );
     });
 
