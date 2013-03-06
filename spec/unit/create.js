@@ -48,6 +48,11 @@ describe('creation', function () {
 
       spyOn( subject, '_createDocument' ).andCallThrough();
 
+      subject._db = {
+        save  : jasmine.createSpy(),
+        exists: jasmine.createSpy()
+      };
+
       subject.save();
     });
 
@@ -64,10 +69,6 @@ describe('creation', function () {
     });
 
     it('calls database.save from create document method', function () {
-      spyOn( subject._db, 'save' );
-
-      subject.save();
-
       expect( subject._db.save ).toHaveBeenCalledWith({
         name  : 'Whiskers',
         gender: 'male',
