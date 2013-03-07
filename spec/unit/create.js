@@ -48,27 +48,31 @@ describe('creation', function () {
 
       spyOn( subject, '_createDocument' ).andCallThrough();
 
+      subject._conn = jasmine.createSpy();
+
       subject._db = {
         save  : jasmine.createSpy(),
         exists: jasmine.createSpy()
       };
 
       subject.save();
+
     });
 
     it('calls `_createDocument`', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
     });
 
-    it('has a valid connection', function () {
-      expect( subject._conn ).not.toBe( null );
-    });
+    // @todo move to integration tests
+    // it('has a valid connection', function () {
+    //   expect( subject._conn ).not.toBe( null );
+    // });
 
-    it('has a valid database', function () {
-      expect( subject._db ).not.toBe( null );
-    });
+    // it('has a valid database', function () {
+    //   expect( subject._db ).not.toBe( null );
+    // });
 
-    it('calls database.save from create document method', function () {
+    it('saves a single document', function () {
       expect( subject._db.save ).toHaveBeenCalledWith({
         name  : 'Whiskers',
         gender: 'male',
@@ -77,7 +81,7 @@ describe('creation', function () {
     });
   });
 
-  xdescribe('of a list of documents', function () {
+  describe('of a list of documents', function () {
     beforeEach(function () {
 
       subject = new KittenList({
@@ -96,16 +100,41 @@ describe('creation', function () {
             name  : 'Ernest',
             gender: 'male',
             age   : 5
-          },
+          }
         ]
       });
 
-      spyOn( subject, 'save' ).andCallThrough();
+      spyOn( subject, '_createDocument' ).andCallThrough();
+
+      subject._conn = jasmine.createSpy();
+
+      subject._db = {
+        save  : jasmine.createSpy(),
+        exists: jasmine.createSpy()
+      };
+
+      subject.save();
 
     });
 
-    xit('creates a list of documents', function () {
-
+    it('saves multiple documents', function () {
+      expect( subject._db.save ).toHaveBeenCalledWith([
+        {
+          name  : 'Sparkles',
+          gender: 'female',
+          age   : 3
+        },
+        {
+          name  : 'Tinkles',
+          gender: 'female',
+          age   : 4
+        },
+        {
+          name  : 'Ernest',
+          gender: 'male',
+          age   : 5
+        }
+      ], jasmine.any(Function));
     });
   });
 

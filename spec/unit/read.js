@@ -1,31 +1,75 @@
-YUI.add('specs:model-sync-couchdb:read', function (Y) {
+require('yui').getInstance().applyConfig({
+  useSync: true,
+  modules: {
+    'model-sync-couchdb': require('../../index')
+  }
+});
 
-  var cradle = require('cradle');
+var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 
-  describe('read', function () {
+describe('reading', function () {
 
-    var subject;
+  var subject,
+      Kitten = Y.Base.create('kitten',
+        Y.Model,
+        [Y.ModelSync.CouchDB],
+      {
 
-    describe('a single document', function () {
+        databaseName: 'felines'
+
+      }),
+      KittenList = Y.Base.create('kittenList',
+        Y.ModelList,
+        [Y.ModelSync.CouchDB],
+      {
+
+        databaseName: 'felines',
+        model: Kitten
+
+      });
+
+  beforeEach(function () {
+    subject = new Kitten({
+      id : '123456'
+    });
+
+    spyOn( subject, '_fetchDocument' ).andCallThrough();
+
+    subject._conn = jasmine.createSpy();
+
+    subject._db = {
+      get   : jasmine.createSpy(),
+      exists: jasmine.createSpy()
+    };
+  });
+
+  describe('a single document', function () {
+    beforeEach(function () {
+
+      subject.load();
 
     });
 
-    describe('a list of documents', function () {
-
+    it('calls `_fetchDocument', function () {
+      expect( subject._fetchDocument ).toHaveBeenCalledWith({
+        // no options passed
+      }, jasmine.any(Function));
     });
 
-    describe('a view', function () {
-
+    it('calls database.get', function () {
+      expect( subject._db.get ).toHaveBeenCalledWith(
+        '123456',
+        jasmine.any(Function));
     });
+  });
+
+  describe('a list of documents', function () {
 
   });
 
-},
-'0.0.1',
-{
-  requires: [
-    'model',
-    'model-list',
-    'model-sync-couchdb'
-  ]
+  describe('a view', function () {
+
+  });
+
 });
+
