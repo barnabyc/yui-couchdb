@@ -1,5 +1,3 @@
-console.log('create, 1');
-
 require('yui').getInstance().applyConfig({
   useSync: true,
   modules: {
@@ -9,12 +7,7 @@ require('yui').getInstance().applyConfig({
 
 var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 
-console.log('create, 2');
-// @todo change databasenames dynamically during tests
-// @todo cleanup after tests
 describe('creation', function () {
-
-  console.log('create, 3');
 
   var subject,
       Kitten = Y.Base.create('kitten',
@@ -35,7 +28,13 @@ describe('creation', function () {
 
       });
 
-  console.log('create, 4');
+  xdescribe('of a database', function () {
+    // @todo
+  });
+
+  xdescribe('of a design document', function () {
+    // @todo
+  });
 
   describe('of a single document', function () {
     beforeEach(function () {

@@ -28,26 +28,22 @@ describe('reading', function () {
 
       });
 
-  beforeEach(function () {
-    subject = new Kitten({
-      id : '123456'
-    });
-
-    spyOn( subject, '_fetchDocument' ).andCallThrough();
-
-    subject._conn = jasmine.createSpy();
-
-    subject._db = {
-      get   : jasmine.createSpy(),
-      exists: jasmine.createSpy()
-    };
-  });
-
   describe('a single document', function () {
     beforeEach(function () {
+      subject = new Kitten({
+        id : '123456'
+      });
+
+      spyOn( subject, '_fetchDocument' ).andCallThrough();
+
+      subject._conn = jasmine.createSpy();
+
+      subject._db = {
+        get   : jasmine.createSpy(),
+        exists: jasmine.createSpy()
+      };
 
       subject.load();
-
     });
 
     it('calls `_fetchDocument', function () {
@@ -64,11 +60,68 @@ describe('reading', function () {
   });
 
   describe('a list of documents', function () {
+    beforeEach(function () {
+      subject = new KittenList({
+        items: [
+          {
+            name  : 'Sparkles',
+            gender: 'female',
+            age   : 3
+          },
+          {
+            name  : 'Tinkles',
+            gender: 'female',
+            age   : 4
+          },
+          {
+            name  : 'Ernest',
+            gender: 'male',
+            age   : 5
+          }
+        ]
+      });
 
+      spyOn( subject, '_queryAll' ).andCallThrough();
+      spyOn( subject, '_queryView' ).andCallThrough();
+
+      subject._conn = jasmine.createSpy();
+
+      subject._db = {
+        view  : jasmine.createSpy(),
+        exists: jasmine.createSpy()
+      };
+
+      subject.load();
+    });
+
+    it('calls `_queryAll`', function () {
+      expect( subject._queryAll ).toHaveBeenCalledWith({
+        // no options passed
+      }, jasmine.any(Function));
+    });
+
+    describe('via an `all` view', function () {
+      it('calls `_queryView` with the default ALL_VIEW_NAME', function () {
+        expect( subject._queryView ).toHaveBeenCalledWith(
+          'all',
+          {
+            // no options passed
+          },
+          jasmine.any(Function)
+        );
+      });
+
+      it('calls database.view', function () {
+        expect( subject._db.view ).toHaveBeenCalledWith(
+          'all',
+          jasmine.any(Function)
+        );
+      });
+    });
   });
 
-  describe('a view', function () {
-
+  xdescribe('a specific view', function () {
+    // @todo
   });
 
 });
