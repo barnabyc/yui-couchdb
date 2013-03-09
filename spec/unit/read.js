@@ -57,6 +57,10 @@ describe('reading', function () {
         '123456',
         jasmine.any(Function));
     });
+
+    xit('calls the passed callback', function () {
+      // @todo
+    });
   });
 
   describe('a list of documents', function () {
@@ -117,11 +121,45 @@ describe('reading', function () {
           jasmine.any(Function)
         );
       });
+
+      xit('calls the passed callback', function () {
+        // @todo
+      });
     });
   });
 
-  xdescribe('a specific view', function () {
-    // @todo
+  describe('a specific view', function () {
+    var callback;
+
+    beforeEach(function () {
+      subject = new Kitten({
+        id : '123456'
+      });
+
+      spyOn( subject, '_fetchDocument' ).andCallThrough();
+
+      subject._conn = jasmine.createSpy();
+
+      subject._db = {
+        view  : jasmine.createSpy(),
+        exists: jasmine.createSpy()
+      };
+
+      callback = jasmine.createSpy();
+
+      subject._queryView('characters', {}, callback);
+    });
+
+    it('calls database.view', function () {
+      expect( subject._db.view ).toHaveBeenCalledWith(
+        'characters',
+        jasmine.any(Function)
+      );
+    });
+
+    xit('calls the passed callback', function () {
+      // @todo
+    });
   });
 
 });
