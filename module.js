@@ -31,26 +31,16 @@ YUI.add('model-sync-couchdb', function (Y) {
     initializer: function (config) {
       Y.log('YEAH! COUCH IN DA HOUSE!', 'debug', this.constructor.NAME);
 
+      // @todo decide if we really want to support this
+      if (this._isYUIModelList) {
+        this.save = this._saveModelList;
+      }
+
       cradle.setup( this.setup );
     },
 
-    // todo; decide if we really want to support this
-    // ONLY FOR ModelList
-    save: function (options, callback) {
-      // todo properly
-      this.sync('create', options, function (err, res) {
-        if (err) {
-          Y.log('Error creating: ' + err, 'error', this.constructor.NAME);
-          Y.log('res: '+JSON.stringify( res), 'debug', this.constructor.NAME);
-
-        } else {
-          callback && callback( res );
-        }
-      });
-    },
-
     sync: function (action, options, callback) {
-      // todo handle failure
+      // @todo handle failure gracefully
       this._connect();
 
       if (action === 'create') {
@@ -65,7 +55,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         }
 
       } else if (action === 'update') {
-        // todo
+        // @todo implement updating documents
 
       } else if (action === 'delete') {
         this._deleteDocument(options, callback);
@@ -76,9 +66,20 @@ YUI.add('model-sync-couchdb', function (Y) {
 
     // ----- Protected ----------------------------- //
 
+    _saveModelList: function (options, callback) {
+      this.sync('create', options, function (err, res) {
+        if (err) {
+          Y.log('Error creating: ' + err, 'error', this.constructor.NAME);
+          Y.log('res: '+JSON.stringify( res), 'debug', this.constructor.NAME);
+
+        } else {
+          callback && callback( res );
+        }
+      });
+    },
+
     _deleteDocument: function (options, callback) {
-      // todo check for id
-      // todo check for revision
+      // @todo check for revision
 
       this._db.remove(
         this.get('id'),
@@ -111,7 +112,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     },
 
     _fetchDocument: function (options, callback) {
-      // todo handle options; revision, etc
+      // @todo handle options; revision, etc
 
       this._db.get(
         this.get('id'),
@@ -168,7 +169,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     _verifyDatabase: function () {
       this._db.exists(Y.bind(function (err, exists) {
         if (err) {
-          Y.log('Error verifying existence: ' + err, 'error', this.constructor.NAME);
+          Y.log('Error verifying database exists: ' + err, 'error', this.constructor.NAME);
 
         } else if (!exists) {
           Y.log('Database does not exist: ' + this.databaseName, 'info', this.constructor.NAME);

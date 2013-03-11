@@ -41,5 +41,5 @@ YUI.add('felineworld:kitten_list', function (Y) {
 
 Run via `jasmine-node`:
 
-    jasmine-node --matchall --verbose spec/unit/create.js
+    jasmine-node --verbose --matchall spec/unit/
 

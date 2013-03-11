@@ -104,7 +104,7 @@ describe('reading', function () {
       }, jasmine.any(Function));
     });
 
-    describe('via an `all` view', function () {
+    describe('via a view', function () {
       it('calls `_queryView` with the default ALL_VIEW_NAME', function () {
         expect( subject._queryView ).toHaveBeenCalledWith(
           'all',
