@@ -1,15 +1,40 @@
 YUI.add('model-sync-couchdb', function (Y) {
 
+  /**
+  An extension which provides a CouchDB sync implementation
+  that can be mixed into a Model or ModelList subclass.
+
+  @module app
+  @submodule model-sync-couchdb
+  **/
+
   var cradle = require('cradle');
 
+  /**
+  @class ModelSync.CouchDB
+  @extensionfor Model
+  @extensionfor ModelList
+  **/
   function CouchDBSync () {};
 
   CouchDBSync.ALL_VIEW_NAME = 'all';
   CouchDBSync.CREATE_MISSING_DB = true;
+
+  /**
+  Properties that shouldn't be turned into ad-hoc attributes when passed to a
+  Model or ModelList constructor.
+
+  @property _NON_ATTRS_CFG
+  @type Array
+  @static
+  @protected
+  **/
   CouchDBSync._NON_ATTRS_CFG = [
-    "setup", // Cradle Setup
-    "databaseName", "designDocument",
-    "_db", "_conn"
+    "setup",
+    "databaseName",
+    "designDocument",
+    "_db",
+    "_conn"
   ];
 
   CouchDBSync.prototype = {
