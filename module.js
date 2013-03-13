@@ -104,7 +104,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     },
 
     _deleteDocument: function (options, callback) {
-      // @todo check for revision
+      // @todo conditionally use revision
 
       this._db.remove(
         this.get('id'),
@@ -118,6 +118,11 @@ YUI.add('model-sync-couchdb', function (Y) {
           }
         }
       );
+    },
+
+    _deleteList: function (options, callback) {
+      // @todo implement _deleteList
+      // @todo confirm whether we need to augment ModelList
     },
 
     _createDocument: function (options, callback) {
