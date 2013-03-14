@@ -32,13 +32,18 @@ YUI.add('model-sync-couchdb', function (Y) {
   CouchDBSync._NON_ATTRS_CFG = [
     "setup",
     "databaseName",
-    "designDocument",
-    "_db",
-    "_conn"
+    "designDocument"
   ];
 
   CouchDBSync.prototype = {
 
+    /**
+    Connection details for the database.
+    Defaults to server running locally.
+
+    @property setup
+    @type {Object}
+    **/
     setup: {
       host:  '127.0.0.1',
       port:  5984,
@@ -46,12 +51,24 @@ YUI.add('model-sync-couchdb', function (Y) {
       raw:   false
     },
 
+    /**
+    The name of the database to use for this Model or ModelList.
+
+    @property databaseName
+    @type {String}
+    **/
     databaseName: '',
 
+    /**
+    Specifies a design document for creation.
+
+    @property designDocument
+    @default null
+    @type {Object|null}
+    **/
     designDocument: null,
 
-    _db: null,
-    _conn: null,
+    // ----- Lifecycle ----------------------------- //
 
     initializer: function (config) {
       Y.log('YEAH! COUCH IN DA HOUSE!', 'debug', this.constructor.NAME);
@@ -63,6 +80,8 @@ YUI.add('model-sync-couchdb', function (Y) {
 
       cradle.setup( this.setup );
     },
+
+    // ----- Public -------------------------------- //
 
     sync: function (action, options, callback) {
       // @todo handle failure gracefully
