@@ -2,9 +2,12 @@
 
 ### Y.ModelSync.CouchDB
 
-Provides a syncing layer for YUI Model and ModelList to a CouchDB storage system.
+Provides a sync layer for YUI Model and ModelList to a CouchDB database.
 
 ### Usage
+
+Mix-in to a Model or ModelList as normal, remembering to include a `databaseName` property.
+
 ```javascript
 var YUI = require('yui').YUI,
 
@@ -37,9 +40,15 @@ YUI.add('felineworld:kitten_list', function (Y) {
 });
 ```
 
+Then simply call `save()`, `load()`, etc as you normally would.
+
 ### Specs
 
 Run via `jasmine-node`:
 
     jasmine-node --verbose --matchall spec/unit/
+
+### Caveats
+
+Currently only supports nodejs environments as it depends on the Cradle NPM module: https://npmjs.org/package/cradle
 

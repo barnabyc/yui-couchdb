@@ -84,16 +84,21 @@ YUI.add('model-sync-couchdb', function (Y) {
     // ----- Public -------------------------------- //
 
     /**
-    Communicates with a CouchDB server by using the npm module `cradle`
-    methods. This method is called internally by load(), save(), and destroy().
+    Communicates with a CouchDB database.
+
+    @note
+      Initial versions are limited to nodejs as
+      they depend upon the npm module `cradle`.
+
+    This method is called internally by load(), save(), and destroy().
 
     @method sync
     @param {String} action Sync action to perform. May be one of the following:
 
       * `create`: Store a newly-created model for the first time.
-      * `delete`: Delete an existing model.
       * `read`  : Load an existing model.
       * `update`: Update an existing model.
+      * `delete`: Delete an existing model.
 
     @param {Object} [options] Sync options:
       @param ...
