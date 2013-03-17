@@ -136,40 +136,77 @@ YUI.add('model-sync-couchdb', function (Y) {
 
     // ----- Protected ----------------------------- //
 
+    /**
+    Extend ModelList subclasses with a `save` method to facilitate
+    saving of lists of documents.
+
+    @method _saveModelList
+    @param {Object} options
+    @param {Function} callback
+      @param {Any} result
+    @protected
+    **/
     _saveModelList: function (options, callback) {
-      this.sync('create', options, function (err, res) {
+      this.sync('create', options, function (err, result) {
         if (err) {
           Y.log('Error creating: ' + err, 'error', this.constructor.NAME);
           Y.log('res: '+JSON.stringify( res), 'debug', this.constructor.NAME);
 
         } else {
-          callback && callback( res );
+          callback && callback( result );
         }
       });
     },
 
+    /**
+    Remove a single document from the database.
+
+    @method _deleteDocument
+    @param {Object} options
+    @param {Function} callback
+      @param {Any} result
+    @protected
+    **/
     _deleteDocument: function (options, callback) {
       // @todo conditionally use revision
 
       this._db.remove(
         this.get('id'),
         this.get('revision'),
-        function (err, res) {
+        function (err, result) {
           if (err) {
             Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( res );
+            callback && callback( result );
           }
         }
       );
     },
 
+    /**
+    Remove a list of documents from the database.
+
+    @method _deleteList
+    @param {Object} options
+    @param {Function} callback
+      @param {Any} result
+    @protected
+    **/
     _deleteList: function (options, callback) {
       // @todo implement _deleteList
       // @todo confirm whether we need to augment ModelList
     },
 
+    /**
+    Create a single new document.
+
+    @method _createDocument
+    @param {Object} options
+    @param {Function} callback
+      @param {Any} result
+    @protected
+    **/
     _createDocument: function (options, callback) {
       var doc = this.toJSON();
 
@@ -186,6 +223,15 @@ YUI.add('model-sync-couchdb', function (Y) {
       );
     },
 
+    /**
+    Fetch a single document.
+
+    @method _fetchDocument
+    @param {Object} options
+    @param {Function} callback
+      @param {Object} doc
+    @protected
+    **/
     _fetchDocument: function (options, callback) {
       // @todo handle options; revision, etc
 

@@ -40,7 +40,7 @@ YUI.add('felineworld:kitten_list', function (Y) {
 });
 ```
 
-Then simply call `save()`, `load()`, etc as you normally would.
+Then simply call the standard sync methods (`save`, `load`, etc)  as you normally would.
 
 ### Specs
 
@@ -50,5 +50,5 @@ Run via `jasmine-node`:
 
 ### Caveats
 
-Currently only supports nodejs environments as it depends on the Cradle NPM module: https://npmjs.org/package/cradle
+Currently only supports nodejs environments as it depends on the Cradle npm module: https://npmjs.org/package/cradle
 
