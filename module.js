@@ -248,6 +248,15 @@ YUI.add('model-sync-couchdb', function (Y) {
       );
     },
 
+    /**
+    Query the `all` view for a list of documents.
+
+    @method _queryAll
+    @param {Object} options
+    @param {Function} callback
+      @param {Object} doc
+    @protected
+    **/
     _queryAll: function (options, callback) {
       this._queryView(
         CouchDBSync.ALL_VIEW_NAME,
@@ -256,6 +265,16 @@ YUI.add('model-sync-couchdb', function (Y) {
       );
     },
 
+    /**
+    Query a specific view for a list of documents.
+
+    @method _queryView
+    @param {String} viewName
+    @param {Object} options
+    @param {Function} callback
+      @param {Object} doc
+    @protected
+    **/
     _queryView: function(viewName, options, callback) {
       var view = this.constructor.NAME + '/' + viewName;
 
@@ -272,6 +291,12 @@ YUI.add('model-sync-couchdb', function (Y) {
       );
     },
 
+    /**
+    Create a connection to the server.
+
+    @method _connect
+    @protected
+    **/
     _connect: function () {
       if (!this.databaseName) {
         Y.log('No database name specified!', 'error', this.constructor.NAME);
@@ -287,6 +312,14 @@ YUI.add('model-sync-couchdb', function (Y) {
       this._verifyDatabase();
     },
 
+    /**
+    Verify the specified database exists.
+
+    Optionally, create the specified database if it does not exist.
+
+    @method _verifyDatabase
+    @protected
+    **/
     _verifyDatabase: function () {
       this._db.exists(Y.bind(function (err, exists) {
         if (err) {
@@ -300,6 +333,14 @@ YUI.add('model-sync-couchdb', function (Y) {
       }, this));
     },
 
+    /**
+    Create the database specified in the server connection.
+
+    Optionally, create any specified design document.
+
+    @method _createDatabase
+    @protected
+    **/
     _createDatabase: function () {
       if (CouchDBSync.CREATE_MISSING_DB) {
         this._db.create();
@@ -307,6 +348,12 @@ YUI.add('model-sync-couchdb', function (Y) {
       }
     },
 
+    /**
+    Create a design document if available.
+
+    @method _createDesignDocument
+    @protected
+    **/
     _createDesignDocument: function () {
       if (this.designDocument) {
         db.save(
