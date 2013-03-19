@@ -1,14 +1,19 @@
 YUI.add('model-sync-couchdb', function (Y) {
 
   /**
+  Node module require imports.
+
+  @uses cradle
+  **/
+  var cradle = require('cradle');
+
+  /**
   An extension which provides a CouchDB sync implementation
   that can be mixed into a Model or ModelList subclass.
 
   @module app
   @submodule model-sync-couchdb
   **/
-
-  var cradle = require('cradle');
 
   /**
   @class ModelSync.CouchDB
@@ -17,15 +22,32 @@ YUI.add('model-sync-couchdb', function (Y) {
   **/
   function CouchDBSync () {};
 
+  /**
+  The default query name prefix to use when querying the `all` view.
+
+  @property ALL_VIEW_NAME
+  @type {String}
+  @static
+  @protected
+  **/
   CouchDBSync.ALL_VIEW_NAME = 'all';
+
+  /**
+  Flag to determine whether missing databases should be created.
+
+  @property CREATE_MISSING_DB
+  @type Bool
+  @static
+  @protected
+  **/
   CouchDBSync.CREATE_MISSING_DB = true;
 
   /**
-  Properties that shouldn't be turned into ad-hoc attributes when passed to a
-  Model or ModelList constructor.
+  Properties that shouldn't be turned into ad-hoc attributes
+  when passed to a Model or ModelList constructor.
 
   @property _NON_ATTRS_CFG
-  @type Array
+  @type {Array}
   @static
   @protected
   **/
@@ -73,7 +95,9 @@ YUI.add('model-sync-couchdb', function (Y) {
     initializer: function (config) {
       Y.log('YEAH! COUCH IN DA HOUSE!', 'debug', this.constructor.NAME);
 
-      // @todo decide if we really want to support this
+      // Extend the subclass instance
+      // with `save` if a ModelList
+      //
       if (this._isYUIModelList) {
         this.save = this._saveModelList;
       }
@@ -365,6 +389,9 @@ YUI.add('model-sync-couchdb', function (Y) {
 
   };
 
+  /**
+  Expose to the namespace.
+  **/
   Y.namespace('ModelSync').CouchDB = CouchDBSync;
 
 },
