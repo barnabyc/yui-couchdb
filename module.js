@@ -152,7 +152,13 @@ YUI.add('model-sync-couchdb', function (Y) {
         // @todo implement updating documents
 
       } else if (action === 'delete') {
-        this._deleteDocument(options, callback);
+        if (this.get('revision')) {
+          this._deleteRevision(options, callback);
+
+        } else {
+          this._deleteDocument(options, callback);
+        }
+        
 
       }
 
@@ -161,8 +167,8 @@ YUI.add('model-sync-couchdb', function (Y) {
     // ----- Protected ----------------------------- //
 
     /**
-    Extend ModelList subclasses with a `save` method to facilitate
-    saving of lists of documents.
+    Extend ModelList subclasses with a `save` method
+    to facilitate saving of lists of documents.
 
     @method _saveModelList
     @param {Object} options
@@ -185,6 +191,12 @@ YUI.add('model-sync-couchdb', function (Y) {
     /**
     Remove a single document from the database.
 
+    @note
+      Deleting without a revision forces cradle
+      to attempt to use the latest cached revision.
+      You should always try to use a revision-based
+      delete whenever possible.
+
     @method _deleteDocument
     @param {Object} options
     @param {Function} callback
@@ -192,14 +204,35 @@ YUI.add('model-sync-couchdb', function (Y) {
     @protected
     **/
     _deleteDocument: function (options, callback) {
-      // @todo conditionally use revision
+      this._db.remove(
+        this.get('id'),
+        function (err, result) {
+          if (err) {
+            Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
 
+          } else {
+            callback && callback( result );
+          }
+        }
+      );
+    },
+
+    /**
+    Remove a revision of a document from the database.
+
+    @method _deleteRevision
+    @param {Object} options
+    @param {Function} callback
+      @param {Any} result
+    @protected
+    **/
+    _deleteRevision: function (options, callback) {
       this._db.remove(
         this.get('id'),
         this.get('revision'),
         function (err, result) {
           if (err) {
-            Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
+            Y.log('Error deleteing revision: ' + err, 'error', this.constructor.NAME);
 
           } else {
             callback && callback( result );
@@ -218,8 +251,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     @protected
     **/
     _deleteList: function (options, callback) {
-      // @todo implement _deleteList
-      // @todo confirm whether we need to augment ModelList
+      // @todo extend ModelList subclasses with a `destructor`
     },
 
     /**
