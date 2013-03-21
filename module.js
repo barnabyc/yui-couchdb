@@ -149,7 +149,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         }
 
       } else if (action === 'update') {
-        // @todo implement updating documents
+        this._updateDocument(options, callback);
 
       } else if (action === 'delete') {
         if (this.get('revision')) {
@@ -302,6 +302,19 @@ YUI.add('model-sync-couchdb', function (Y) {
           }
         }
       );
+    },
+
+    /**
+    Update a single document.
+
+    @method _updateDocument
+    @param {Object} options
+    @param {Function} callback
+      @param {Object} doc
+    @protected
+    **/
+    _updateDocument: function (options, callback) {
+      // @todo ensure we have an id and a revision
     },
 
     /**

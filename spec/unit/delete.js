@@ -1,5 +1,4 @@
 require('yui').getInstance().applyConfig({
-  useSync: true,
   modules: {
     'model-sync-couchdb': require('../../index')
   }
