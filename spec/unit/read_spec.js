@@ -57,8 +57,9 @@ describe('reading', function () {
         jasmine.any(Function));
     });
 
-    xit('calls the passed callback', function () {
+    it('passes the result to the passed callback', function () {
       // @todo
+      expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
     });
   });
 
@@ -98,9 +99,12 @@ describe('reading', function () {
     });
 
     it('calls `_queryAll`', function () {
-      expect( subject._queryAll ).toHaveBeenCalledWith({
-        // no options passed
-      }, jasmine.any(Function));
+      expect( subject._queryAll ).toHaveBeenCalledWith(
+        {
+          // no options passed
+        },
+        jasmine.any(Function)
+      );
     });
 
     describe('via a view', function () {
@@ -121,8 +125,9 @@ describe('reading', function () {
         );
       });
 
-      xit('calls the passed callback', function () {
+      it('passes the result to the passed callback', function () {
         // @todo
+        expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
       });
     });
   });
@@ -156,8 +161,9 @@ describe('reading', function () {
       );
     });
 
-    xit('calls the passed callback', function () {
+    it('passes the result to the passed callback', function () {
       // @todo
+      expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
     });
   });
 

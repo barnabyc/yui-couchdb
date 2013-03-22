@@ -6,7 +6,7 @@ require('yui').getInstance().applyConfig({
 
 var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 
-describe('creation', function () {
+describe('creating', function () {
 
   var subject,
       Kitten = Y.Base.create('kitten',
@@ -27,15 +27,7 @@ describe('creation', function () {
 
       });
 
-  xdescribe('of a database', function () {
-    // @todo
-  });
-
-  xdescribe('of a design document', function () {
-    // @todo
-  });
-
-  describe('of a single document', function () {
+  describe('a single document', function () {
     beforeEach(function () {
 
       subject = new Kitten({
@@ -61,15 +53,6 @@ describe('creation', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
     });
 
-    // @todo move to integration tests
-    // it('has a valid connection', function () {
-    //   expect( subject._conn ).not.toBe( null );
-    // });
-
-    // it('has a valid database', function () {
-    //   expect( subject._db ).not.toBe( null );
-    // });
-
     it('saves a single document', function () {
       expect( subject._db.save ).toHaveBeenCalledWith({
         name  : 'Whiskers',
@@ -79,7 +62,7 @@ describe('creation', function () {
     });
   });
 
-  describe('of a list of documents', function () {
+  describe('a list of documents', function () {
     beforeEach(function () {
 
       subject = new KittenList({
@@ -134,6 +117,14 @@ describe('creation', function () {
         }
       ], jasmine.any(Function));
     });
+  });
+
+  describe('a database', function () {
+    // @todo
+  });
+
+  describe('a design document', function () {
+    // @todo
   });
 
 });

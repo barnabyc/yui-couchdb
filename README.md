@@ -46,7 +46,7 @@ Then simply call the standard sync methods (`save`, `load`, etc)  as you normall
 
 Run via `jasmine-node`:
 
-    jasmine-node --verbose --matchall spec/unit/
+    jasmine-node --verbose spec/unit/
 
 ### Caveats
 
