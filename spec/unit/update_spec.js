@@ -27,10 +27,6 @@ describe('updating', function () {
 
       });
 
-  xdescribe('of a design document', function () {
-    // @todo
-  });
-
   describe('of a single document', function () {
     beforeEach(function () {
 
@@ -89,9 +85,14 @@ describe('updating', function () {
       });
     });
 
-    xdescribe('with specific fields', function () {
+    describe('specific fields', function () {
       // @todo
     });
+
+    describe('a design document', function () {
+      // @todo
+    });
+
   });
 
 });

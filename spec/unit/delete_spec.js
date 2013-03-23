@@ -130,11 +130,11 @@ describe('deleting', function () {
     });
   });
 
-  xdescribe('specific fields', function () {
+  describe('specific fields', function () {
     // @todo
   });
 
-  xdescribe('a design document', function () {
+  describe('a design document', function () {
     // @todo
   });
 
