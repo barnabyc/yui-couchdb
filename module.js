@@ -158,7 +158,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         } else {
           this._deleteDocument(options, callback);
         }
-        
+
 
       }
 
@@ -425,7 +425,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     **/
     _createDesignDocument: function () {
       if (this.designDocument) {
-        db.save(
+        this._db.save(
           '_design/' + this.constructor.NAME,
           this.designDocument
         );

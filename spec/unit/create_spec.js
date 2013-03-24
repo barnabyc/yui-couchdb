@@ -120,11 +120,48 @@ describe('creating', function () {
   });
 
   describe('a database', function () {
-    // @todo
+    beforeEach(function () {
+      subject = new Kitten({
+        name  : 'Whiskers',
+        gender: 'male',
+        age   : 4
+      });
+
+      subject._db = {
+        create : jasmine.createSpy()
+      };
+
+      subject._createDatabase();
+    });
+
+    it('calls database.create', function () {
+      expect( subject._db.create ).toHaveBeenCalled();
+    });
   });
 
   describe('a design document', function () {
-    // @todo
+    beforeEach(function () {
+      subject = new Kitten({
+        name  : 'Whiskers',
+        gender: 'male',
+        age   : 4
+      });
+
+      subject.designDocument = 'goesMeow'; // @todo more realism
+
+      subject._db = {
+        save : jasmine.createSpy()
+      };
+
+      subject._createDesignDocument();
+    });
+
+    it('calls database.save', function () {
+      expect( subject._db.save ).toHaveBeenCalledWith(
+        '_design/kitten',
+        'goesMeow'
+      );
+    });
   });
 
 });

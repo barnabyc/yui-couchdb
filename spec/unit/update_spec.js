@@ -27,7 +27,7 @@ describe('updating', function () {
 
       });
 
-  describe('of a single document', function () {
+  describe('a single document', function () {
     beforeEach(function () {
 
       subject = new Kitten({
