@@ -28,6 +28,8 @@ describe('reading', function () {
       });
 
   describe('a single document', function () {
+    var callback;
+
     beforeEach(function () {
       subject = new Kitten({
         id : '123456'
@@ -42,7 +44,9 @@ describe('reading', function () {
         exists: jasmine.createSpy()
       };
 
-      subject.load();
+      callback = jasmine.createSpy();
+
+      subject.load( callback );
     });
 
     it('calls `_fetchDocument', function () {
@@ -55,11 +59,6 @@ describe('reading', function () {
       expect( subject._db.get ).toHaveBeenCalledWith(
         '123456',
         jasmine.any(Function));
-    });
-
-    it('passes the result to the passed callback', function () {
-      // @todo
-      expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
     });
   });
 
@@ -124,17 +123,10 @@ describe('reading', function () {
           jasmine.any(Function)
         );
       });
-
-      it('passes the result to the passed callback', function () {
-        // @todo
-        expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
-      });
     });
   });
 
   describe('a specific view', function () {
-    var callback;
-
     beforeEach(function () {
       subject = new Kitten({
         id : '123456'
@@ -149,9 +141,7 @@ describe('reading', function () {
         exists: jasmine.createSpy()
       };
 
-      callback = jasmine.createSpy();
-
-      subject._queryView('characters', {}, callback);
+      subject._queryView('characters');
     });
 
     it('calls database.view', function () {
@@ -159,11 +149,6 @@ describe('reading', function () {
         'characters',
         jasmine.any(Function)
       );
-    });
-
-    it('passes the result to the passed callback', function () {
-      // @todo
-      expect( callback ).toHaveBeenCalledWith({ foo: 'bar' });
     });
   });
 
