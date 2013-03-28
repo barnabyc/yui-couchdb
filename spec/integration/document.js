@@ -9,6 +9,7 @@ var Y = require('yui').use('model-sync-couchdb', 'model');
 describe('a single document', function () {
 
   var subject,
+      callback,
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [Y.ModelSync.CouchDB],
@@ -19,10 +20,9 @@ describe('a single document', function () {
       });
 
   describe('can be created', function () {
-    var callback;
-
     beforeEach(function () {
       subject = new Kitten({
+        id    : '123456',
         name  : 'Whiskers',
         gender: 'male',
         age   : 4
@@ -41,13 +41,36 @@ describe('a single document', function () {
 
     it('saves a single document', function () {
       expect( callback ).toHaveBeenCalledWith({
-        foo : 'bar'
+        foo : 'saved'
       });
     });
   });
 
   describe('can be read', function () {
-    // @todo
+    beforeEach(function () {
+      subject = new Kitten({
+        id    : '123456',
+        name  : 'Whiskers',
+        gender: 'male',
+        age   : 4
+      });
+
+      spyOn( subject, '_fetchDocument' ).andCallThrough();
+
+      callback = jasmine.createSpy();
+
+      subject.load( callback );
+    });
+
+    it('calls `_fetchDocument`', function () {
+      expect( subject._fetchDocument ).toHaveBeenCalled();
+    });
+
+    it('loads a single document', function () {
+      expect( callback ).toHaveBeenCalledWith({
+        foo : 'loaded'
+      });
+    });
   });
 
   describe('can be updated', function () {
