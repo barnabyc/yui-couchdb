@@ -22,7 +22,6 @@ describe('a single document', function () {
   describe('can be created', function () {
     beforeEach(function () {
       subject = new Kitten({
-        id    : '123456',
         name  : 'Whiskers',
         gender: 'male',
         age   : 4
