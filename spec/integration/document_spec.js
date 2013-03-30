@@ -10,6 +10,7 @@ describe('a single document', function () {
 
   var subject,
       callback,
+      id = (new Date).toISOString() + Math.random(),
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [Y.ModelSync.CouchDB],
@@ -22,6 +23,7 @@ describe('a single document', function () {
   describe('can be created', function () {
     beforeEach(function () {
       subject = new Kitten({
+        _id   : id,
         name  : 'Whiskers',
         gender: 'male',
         age   : 4
@@ -38,20 +40,21 @@ describe('a single document', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
     });
 
-    it('saves a single document', function () {
+    it('calls the save callback', function () {
       expect( callback ).toHaveBeenCalledWith({
         foo : 'saved'
       });
+    });
+
+    it('now has an id', function () {
+      expect( subject.get('id') ).toBe( 123 );
     });
   });
 
   describe('can be read', function () {
     beforeEach(function () {
       subject = new Kitten({
-        id    : '123456',
-        name  : 'Whiskers',
-        gender: 'male',
-        age   : 4
+        _id   : id
       });
 
       spyOn( subject, '_fetchDocument' ).andCallThrough();

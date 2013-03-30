@@ -270,7 +270,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         doc,
         function (err, res) {
           if (err) {
-            Y.log('Error saving document: ' + err, 'error', this.constructor.NAME);
+            Y.log('Error saving document: ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
             callback && callback( err, res );
