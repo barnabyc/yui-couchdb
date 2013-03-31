@@ -273,10 +273,28 @@ YUI.add('model-sync-couchdb', function (Y) {
             Y.log('Error saving document: ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
+            Y.log('Saved document: ' + JSON.stringify( res ), 'info', this.constructor.NAME);
+            Y.log('callback: ' + callback, 'debug', this.constructor.NAME);
             callback && callback( err, res );
           }
         }
       );
+    },
+
+    /**
+    Pre-processor responses for `parse`.
+
+    @method _parse
+    @param {Object} response
+    @protected
+    **/
+    _parse: function (response) {
+      var massagedRespone = {
+        id : response.id,
+        rev: response.rev
+      }
+
+      return this.parse(massagedResponed);
     },
 
     /**
