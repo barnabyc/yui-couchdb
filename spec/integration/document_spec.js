@@ -12,7 +12,6 @@ describe('a single document', function () {
   var subject,
       callback,
       // id = (new Date).toISOString() + Math.random(),
-      createdDocumentId,
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [Y.ModelSync.CouchDB],
@@ -32,16 +31,21 @@ describe('a single document', function () {
       });
 
       spyOn( subject, '_createDocument' ).andCallThrough();
+      spyOn( subject, 'parse' ).andCallThrough();
 
       callback = jasmine.createSpy();
 
       subject.save( callback );
-
-      createdDocumentId = subject.get('id');
     });
 
     it('calls `_createDocument`', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
+    });
+
+    it('parses the response', function () {
+      expect( subject.parse ).toHaveBeenCalledWith({
+        id: 'bumbum'
+      })
     });
 
     it('calls the save callback', function () {
@@ -51,7 +55,7 @@ describe('a single document', function () {
     });
 
     it('now has an id', function () {
-      expect( createdDocumentId ).toBe( 123 );
+      expect( subject.get('id') ).toBe( 123 );
     });
   });
 

@@ -294,6 +294,8 @@ YUI.add('model-sync-couchdb', function (Y) {
         rev: response.rev
       }
 
+      Y.log(JSON.stringify( response ), 'debug', this.constructor.NAME);
+
       return this.parse(massagedResponed);
     },
 
