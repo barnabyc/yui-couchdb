@@ -11,7 +11,8 @@ describe('a single document', function () {
 
   var subject,
       callback,
-      // id = (new Date).toISOString() + Math.random(),
+      createdId,
+      createdRev,
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [Y.ModelSync.CouchDB],
@@ -24,7 +25,6 @@ describe('a single document', function () {
   describe('can be created', function () {
     beforeEach(function () {
       subject = new Kitten({
-        // _id   : id,
         name  : 'Whiskers',
         gender: 'male',
         age   : 4
@@ -35,50 +35,91 @@ describe('a single document', function () {
 
       callback = jasmine.createSpy();
 
-      subject.save( callback );
+      runs(function () {
+        subject.save( callback );
+      });
+
+      waits(100);
     });
 
     it('calls `_createDocument`', function () {
-      expect( subject._createDocument ).toHaveBeenCalled();
+      runs(function () {
+        expect( subject._createDocument ).toHaveBeenCalled();
+      });
     });
 
     it('parses the response', function () {
-      expect( subject.parse ).toHaveBeenCalledWith({
-        id: 'bumbum'
-      })
-    });
-
-    it('calls the save callback', function () {
-      expect( callback ).toHaveBeenCalledWith({
-        foo : 'saved'
+      runs(function () {
+        expect( subject.parse ).toHaveBeenCalledWith({
+          ok  : true,
+          id  : subject.get('id'),
+          rev : subject.get('rev')
+        });
       });
     });
 
     it('now has an id', function () {
-      expect( subject.get('id') ).toBe( 123 );
+      runs(function () {
+        expect( subject.get('id') ).not.toBe( undefined );
+
+        createdId = subject.get('id');
+      });
+    });
+
+    it('now has a revision', function () {
+      runs(function () {
+        expect( subject.get('rev') ).not.toBe( undefined );
+
+        createdRev = subject.get('rev');
+      });
+    });
+
+    it('calls the save callback without error', function () {
+      runs(function () {
+        expect( callback ).toHaveBeenCalledWith(
+          null,
+          {
+            ok  : true,
+            id  : subject.get('id'),
+            rev : subject.get('rev')
+          }
+        );
+      });
     });
   });
 
-  xdescribe('can be read', function () {
+  describe('can be read', function () {
     beforeEach(function () {
       subject = new Kitten({
-        _id   : id
+        id: createdId
       });
 
       spyOn( subject, '_fetchDocument' ).andCallThrough();
 
       callback = jasmine.createSpy();
 
-      subject.load( callback );
+      runs(function () {
+        subject.load( callback );
+      });
+
+      waits(100);
     });
 
     it('calls `_fetchDocument`', function () {
-      expect( subject._fetchDocument ).toHaveBeenCalled();
+      runs(function () {
+        expect( subject._fetchDocument ).toHaveBeenCalled();
+      });
     });
 
     it('loads a single document', function () {
-      expect( callback ).toHaveBeenCalledWith({
-        foo : 'loaded'
+      runs(function () {
+        expect( callback ).toHaveBeenCalledWith({
+          _id    : createdId,
+          _rev   : createdRev,
+          name   : 'Whiskers',
+          gender : 'male',
+          age    : 4
+        });
       });
     });
   });

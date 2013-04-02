@@ -282,21 +282,21 @@ YUI.add('model-sync-couchdb', function (Y) {
     },
 
     /**
-    Pre-processor responses for `parse`.
+    Override `parse`.
 
-    @method _parse
+    @method parse
     @param {Object} response
-    @protected
+    @returns {Object}
     **/
-    _parse: function (response) {
-      var massagedRespone = {
-        id : response.id,
-        rev: response.rev
-      }
+    parse: function (response) {
+      // @todo change to _id & _rev ?
+      var response = JSON.parse( response ),
+          massagedRespone = {
+            id : response.id,
+            rev: response.rev
+          };
 
-      Y.log(JSON.stringify( response ), 'debug', this.constructor.NAME);
-
-      return this.parse(massagedResponed);
+      return response;
     },
 
     /**
