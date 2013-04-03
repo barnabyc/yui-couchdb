@@ -173,17 +173,17 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _saveModelList
     @param {Object} options
     @param {Function} callback
-      @param {Any} result
+      @param {Object} response
     @protected
     **/
     _saveModelList: function (options, callback) {
-      this.sync('create', options, function (err, result) {
+      this.sync('create', options, function (err, response) {
         if (err) {
           Y.log('Error creating: ' + err, 'error', this.constructor.NAME);
-          Y.log('res: '+JSON.stringify( res), 'debug', this.constructor.NAME);
+          Y.log('response: '+JSON.stringify( response ), 'debug', this.constructor.NAME);
 
         } else {
-          callback && callback( result );
+          callback && callback( response );
         }
       });
     },
@@ -200,18 +200,18 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _deleteDocument
     @param {Object} options
     @param {Function} callback
-      @param {Any} result
+      @param {Object} response
     @protected
     **/
     _deleteDocument: function (options, callback) {
       this._db.remove(
         this.get('id'),
-        function (err, result) {
+        function (err, response) {
           if (err) {
             Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( result );
+            callback && callback( response );
           }
         }
       );
@@ -223,19 +223,19 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _deleteRevision
     @param {Object} options
     @param {Function} callback
-      @param {Any} result
+      @param {Object} response
     @protected
     **/
     _deleteRevision: function (options, callback) {
       this._db.remove(
         this.get('id'),
         this.get('revision'),
-        function (err, result) {
+        function (err, response) {
           if (err) {
             Y.log('Error deleteing revision: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( result );
+            callback && callback( response );
           }
         }
       );
@@ -247,7 +247,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _deleteList
     @param {Object} options
     @param {Function} callback
-      @param {Any} result
+      @param {Object} response
     @protected
     **/
     _deleteList: function (options, callback) {
@@ -260,7 +260,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _createDocument
     @param {Object} options
     @param {Function} callback
-      @param {Any} result
+      @param {Object} response
     @protected
     **/
     _createDocument: function (options, callback) {
@@ -268,35 +268,15 @@ YUI.add('model-sync-couchdb', function (Y) {
 
       this._db.save(
         doc,
-        function (err, res) {
+        function (err, response) {
           if (err) {
             Y.log('Error saving document: ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
-            Y.log('Saved document: ' + JSON.stringify( res ), 'info', this.constructor.NAME);
-            Y.log('callback: ' + callback, 'debug', this.constructor.NAME);
-            callback && callback( err, res );
+            callback && callback( err, response );
           }
         }
       );
-    },
-
-    /**
-    Override `parse`.
-
-    @method parse
-    @param {Object} response
-    @returns {Object}
-    **/
-    parse: function (response) {
-      // @todo change to _id & _rev ?
-      var response = JSON.parse( response ),
-          massagedRespone = {
-            id : response.id,
-            rev: response.rev
-          };
-
-      return response;
     },
 
     /**
@@ -318,7 +298,7 @@ YUI.add('model-sync-couchdb', function (Y) {
             Y.log('Error querying ' + view + ': ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( doc );
+            callback && callback( err, doc );
           }
         }
       );

@@ -1,5 +1,5 @@
 require('yui').getInstance().applyConfig({
-  filter: 'debug',
+  // filter: 'debug',
   modules: {
     'model-sync-couchdb': require('../../index')
   }
@@ -113,7 +113,9 @@ describe('a single document', function () {
 
     it('loads a single document', function () {
       runs(function () {
-        expect( callback ).toHaveBeenCalledWith({
+        expect( callback ).toHaveBeenCalledWith(
+        null,
+        {
           _id    : createdId,
           _rev   : createdRev,
           name   : 'Whiskers',
