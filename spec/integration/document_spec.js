@@ -74,7 +74,7 @@ describe('a single document', function () {
       });
     });
 
-    it('calls the save callback without error', function () {
+    it('calls the save callback', function () {
       runs(function () {
         expect( callback ).toHaveBeenCalledWith(
           null,
@@ -111,7 +111,20 @@ describe('a single document', function () {
       });
     });
 
-    it('loads a single document', function () {
+    it('now has the loaded values', function () {
+      runs(function () {
+        expect( subject.toJSON() ).toEqual({
+          id     : createdId,
+          _id    : createdId,
+          _rev   : createdRev,
+          name   : 'Whiskers',
+          gender : 'male',
+          age    : 4
+        });
+      });
+    });
+
+    it('calls the load callback', function () {
       runs(function () {
         expect( callback ).toHaveBeenCalledWith(
         null,
@@ -124,6 +137,7 @@ describe('a single document', function () {
         });
       });
     });
+
   });
 
   xdescribe('can be updated', function () {
