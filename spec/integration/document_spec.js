@@ -1,3 +1,5 @@
+var uuid = require('node-uuid');
+
 require('yui').getInstance().applyConfig({
   // filter: 'debug',
   modules: {
@@ -13,12 +15,23 @@ describe('a single document', function () {
       callback,
       createdId,
       createdRev,
+      databaseName = 'felines_'+uuid.v4(),
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [Y.ModelSync.CouchDB],
       {
 
-        databaseName: 'felines'
+        databaseName: databaseName,
+
+        designDocument: {
+          breeds: {
+            all: {
+              map: function (doc) {
+                if (doc.breed) emit(doc.breed, doc);
+              }
+            }
+          }
+        }
 
       });
 

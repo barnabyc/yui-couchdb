@@ -54,7 +54,7 @@ YUI.add('model-sync-couchdb', function (Y) {
   CouchDBSync._NON_ATTRS_CFG = [
     "setup",
     "databaseName",
-    "designDocument"
+    "designDocuments"
   ];
 
   CouchDBSync.prototype = {
@@ -84,11 +84,11 @@ YUI.add('model-sync-couchdb', function (Y) {
     /**
     Specifies a design document for creation.
 
-    @property designDocument
+    @property designDocuments
     @default null
     @type {Object|null}
     **/
-    designDocument: null,
+    designDocuments: null,
 
     // ----- Lifecycle ----------------------------- //
 
@@ -413,22 +413,26 @@ YUI.add('model-sync-couchdb', function (Y) {
     _createDatabase: function () {
       if (CouchDBSync.CREATE_MISSING_DB) {
         this._db.create();
-        this._createDesignDocument();
+        this._createDesignDocuments();
       }
     },
 
     /**
-    Create a design document if available.
+    Creates one or more design documents if specified.
 
-    @method _createDesignDocument
+    @method _createDesignDocuments
     @protected
     **/
-    _createDesignDocument: function () {
-      if (this.designDocument) {
-        this._db.save(
-          '_design/' + this.constructor.NAME,
-          this.designDocument
-        );
+    _createDesignDocuments: function () {
+      var docs = this.designDocuments;
+
+      if (docs) {
+        for(docName in docs) {
+          this._db.save(
+            '_design/' + docName,
+            docs[ docName ]
+          );
+        }
       }
     }
 

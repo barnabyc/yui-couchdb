@@ -140,6 +140,12 @@ describe('creating', function () {
   });
 
   describe('a design document', function () {
+    var designDocAllView = {
+      map: function (doc) {
+        if (doc.breed) emit(doc.breed, doc);
+      }
+    };
+
     beforeEach(function () {
       subject = new Kitten({
         name  : 'Whiskers',
@@ -147,19 +153,25 @@ describe('creating', function () {
         age   : 4
       });
 
-      subject.designDocument = 'goesMeow'; // @todo more realism
+      subject.designDocuments = {
+        breeds: {
+          all: designDocAllView
+        }
+      };
 
       subject._db = {
         save : jasmine.createSpy()
       };
 
-      subject._createDesignDocument();
+      subject._createDesignDocuments();
     });
 
     it('calls database.save', function () {
       expect( subject._db.save ).toHaveBeenCalledWith(
-        '_design/kitten',
-        'goesMeow'
+        '_design/breeds',
+         {
+          all: designDocAllView
+         }
       );
     });
   });
