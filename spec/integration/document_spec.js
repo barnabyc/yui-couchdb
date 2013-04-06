@@ -21,17 +21,7 @@ describe('a single document', function () {
         [Y.ModelSync.CouchDB],
       {
 
-        databaseName: databaseName,
-
-        designDocument: {
-          breeds: {
-            all: {
-              map: function (doc) {
-                if (doc.breed) emit(doc.breed, doc);
-              }
-            }
-          }
-        }
+        databaseName: databaseName
 
       });
 

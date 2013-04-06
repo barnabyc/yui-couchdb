@@ -11,10 +11,8 @@ describe('a list of documents', function () {
   var subject,
       Kitten = Y.Base.create('kitten',
         Y.Model,
-        [Y.ModelSync.CouchDB],
+        [],
       {
-
-        databaseName: 'felines'
 
       }),
       KittenList = Y.Base.create('kittenList',
@@ -22,18 +20,37 @@ describe('a list of documents', function () {
         [Y.ModelSync.CouchDB],
       {
 
+        model: Kitten,
+
         databaseName: 'felines',
-        model: Kitten
+
+        designDocument: {
+          breeds: {
+            all: {
+              map: function (doc) {
+                if (doc.breed) emit(doc.breed, doc);
+              }
+            }
+          }
+        }
 
       });
 
   describe('can be created', function () {
     beforeEach(function () {
 
-      subject = new Kitten({
-        name  : 'Whiskers',
-        gender: 'male',
-        age   : 4
+      subject = new KittenList({
+        items: [
+          new Kitten({
+            name: 'Sprinkles'
+          }),
+          new Kitten({
+            name: 'Toodles'
+          }),
+          new Kitten({
+            name: 'Mr. Fribbles'
+          })
+        ]
       });
 
       spyOn( subject, '_createDocument' ).andCallThrough();
@@ -53,12 +70,12 @@ describe('a list of documents', function () {
       expect( subject._createDocument ).toHaveBeenCalled();
     });
 
-    it('saves a single document', function () {
-      expect( subject._db.save ).toHaveBeenCalledWith({
-        name  : 'Whiskers',
-        gender: 'male',
-        age   : 4
-      }, jasmine.any(Function));
+    it('saves a list of documents', function () {
+      expect( subject._db.save ).toHaveBeenCalledWith([
+        { name : 'Sprinkles',    id : undefined },
+        { name : 'Toodles',      id : undefined },
+        { name : 'Mr. Fribbles', id : undefined }
+      ], jasmine.any(Function));
     });
   });
 
