@@ -420,6 +420,8 @@ YUI.add('model-sync-couchdb', function (Y) {
     /**
     Creates one or more design documents if specified.
 
+    @todo make ModelList `all` views some handy default.
+
     @method _createDesignDocuments
     @protected
     **/

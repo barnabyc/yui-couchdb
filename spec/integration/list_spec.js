@@ -41,15 +41,9 @@ describe('a list of documents', function () {
 
       subject = new KittenList({
         items: [
-          new Kitten({
-            name: 'Sprinkles'
-          }),
-          new Kitten({
-            name: 'Toodles'
-          }),
-          new Kitten({
-            name: 'Mr. Fribbles'
-          })
+          { name: 'Sprinkles' },
+          { name: 'Toodles' },
+          { name: 'Mr. Fribbles' }
         ]
       });
 
