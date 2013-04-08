@@ -89,10 +89,44 @@ describe('updating', function () {
       // @todo
     });
 
-    describe('a design document', function () {
-      // @todo
+  });
+
+  describe('design documents', function () {
+    // @todo ensure we're actually updating existing design docs... how?
+    var designDocAllView = {
+      map: function (doc) {
+        if (doc.breed) emit(doc.breed, doc);
+      }
+    };
+
+    beforeEach(function () {
+      subject = new Kitten({
+        name  : 'Whiskers',
+        gender: 'male',
+        age   : 4
+      });
+
+      subject.designDocuments = {
+        breeds: {
+          all: designDocAllView
+        }
+      };
+
+      subject._db = {
+        save : jasmine.createSpy()
+      };
+
+      subject._createDesignDocuments();
     });
 
+    it('calls database.save', function () {
+      expect( subject._db.save ).toHaveBeenCalledWith(
+        '_design/breeds',
+         {
+          all: designDocAllView
+         }
+      );
+    });
   });
 
 });

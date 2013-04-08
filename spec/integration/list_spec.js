@@ -24,7 +24,7 @@ describe('a list of documents', function () {
 
         databaseName: 'felines',
 
-        designDocument: {
+        designDocuments: {
           breeds: {
             all: {
               map: function (doc) {

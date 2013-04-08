@@ -139,7 +139,7 @@ describe('creating', function () {
     });
   });
 
-  describe('a design document', function () {
+  describe('design documents', function () {
     var designDocAllView = {
       map: function (doc) {
         if (doc.breed) emit(doc.breed, doc);
