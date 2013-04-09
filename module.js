@@ -314,7 +314,25 @@ YUI.add('model-sync-couchdb', function (Y) {
     @protected
     **/
     _updateDocument: function (options, callback) {
-      // @todo ensure we have an id and a revision
+      var doc = this.toJSON();
+
+      delete doc.id;
+      delete doc.revision;
+
+      // @todo use db.merge instead for dirty attrs
+      this._db.save(
+        this.get('id'),
+        this.get('revision'),
+        doc,
+        function (err, response) {
+          if (err) {
+            Y.log('Error updating document: ' + JSON.stringify( err ), 'error', this.constructor.NAME);
+
+          } else {
+            callback && callback( err, response );
+          }
+        }
+      );
     },
 
     /**

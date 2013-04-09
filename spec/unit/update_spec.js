@@ -57,6 +57,7 @@ describe('updating', function () {
     it('saves the document', function () {
       expect( subject._db.save ).toHaveBeenCalledWith(
         '123abc456def',
+        undefined,
         {
           name  : 'Whiskers',
           gender: 'male',
@@ -68,7 +69,8 @@ describe('updating', function () {
 
     describe('at a specific revision', function () {
       beforeEach(function () {
-        subject.addAttr('revision', 'version-2-0-9');
+        subject.addAttr('revision', { value: 'version-2-0-9' });
+        subject.save();
       });
 
       it('saves the revision', function () {
@@ -86,7 +88,7 @@ describe('updating', function () {
     });
 
     describe('specific fields', function () {
-      // @todo
+      // @todo requires module to support db.merge('foo',{foo:bar}, ...)
     });
 
   });
