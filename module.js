@@ -316,6 +316,7 @@ YUI.add('model-sync-couchdb', function (Y) {
     _updateDocument: function (options, callback) {
       var doc = this.toJSON();
 
+      // @todo change this to a serialize call or something similar
       delete doc.id;
       delete doc.revision;
 

@@ -9,6 +9,7 @@ var Y = require('yui').use('model-sync-couchdb', 'model', 'model-list');
 describe('a list of documents', function () {
 
   var subject,
+      callback,
       Kitten = Y.Base.create('kitten',
         Y.Model,
         [],
@@ -48,28 +49,32 @@ describe('a list of documents', function () {
       });
 
       spyOn( subject, '_createDocument' ).andCallThrough();
+      spyOn( subject, 'parse' ).andCallThrough();
 
-      subject._conn = jasmine.createSpy();
+      callback = jasmine.createSpy();
 
-      subject._db = {
-        save  : jasmine.createSpy(),
-        exists: jasmine.createSpy()
-      };
+      runs(function () {
+        subject.save( callback );
+      });
 
-      subject.save();
+      waits(100);
 
     });
 
     it('calls `_createDocument`', function () {
-      expect( subject._createDocument ).toHaveBeenCalled();
+      runs(function () {
+        expect( subject._createDocument ).toHaveBeenCalled();
+      });
     });
 
-    it('saves a list of documents', function () {
-      expect( subject._db.save ).toHaveBeenCalledWith([
-        { name : 'Sprinkles',    id : undefined },
-        { name : 'Toodles',      id : undefined },
-        { name : 'Mr. Fribbles', id : undefined }
-      ], jasmine.any(Function));
+    it('parses the response', function () {
+      runs(function () {
+        expect( subject.parse ).toHaveBeenCalledWith([
+          { name : 'Sprinkles',    id : undefined },
+          { name : 'Toodles',      id : undefined },
+          { name : 'Mr. Fribbles', id : undefined }
+        ]);
+      });
     });
   });
 
