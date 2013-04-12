@@ -23,16 +23,6 @@ YUI.add('model-sync-couchdb', function (Y) {
   function CouchDBSync () {};
 
   /**
-  The default query name prefix to use when querying the `all` view.
-
-  @property ALL_VIEW_NAME
-  @type {String}
-  @static
-  @protected
-  **/
-  CouchDBSync.ALL_VIEW_NAME = 'all';
-
-  /**
   Flag to determine whether missing databases should be created.
 
   @property CREATE_MISSING_DB
@@ -96,10 +86,12 @@ YUI.add('model-sync-couchdb', function (Y) {
       Y.log('YEAH! COUCH IN DA HOUSE!', 'debug', this.constructor.NAME);
 
       // Extend the subclass instance
-      // with `save` if a ModelList
+      // with `save` and `_parse` if
+      // a ModelList.
       //
       if (this._isYUIModelList) {
-        this.save = this._saveModelList;
+        this.save   = this._saveModelList;
+        this._parse = this._parseModelList;
       }
 
       cradle.setup( this.setup );
@@ -186,6 +178,25 @@ YUI.add('model-sync-couchdb', function (Y) {
           callback && callback( response );
         }
       });
+    },
+
+    /**
+    SO WE MEET AGAIN
+
+    @method _parseModelList
+    @protected
+    **/
+    _parseModelList: function (response) {
+      var massaged;
+
+      if (response instanceof Array) {
+        // @todo split this out
+        massaged = response.map(function (doc) {
+          return doc;
+        });
+      }
+
+      return this.parse(massaged);
     },
 
     /**
@@ -346,10 +357,17 @@ YUI.add('model-sync-couchdb', function (Y) {
     @protected
     **/
     _queryAll: function (options, callback) {
-      this._queryView(
-        CouchDBSync.ALL_VIEW_NAME,
-        options,
-        callback
+      // @todo validate listAllViewPath first
+      this._db.view(
+        this.listAllViewPath,
+        function (err, documents) {
+          if (err) {
+            Y.log('Error querying ' + view + ': ' + JSON.stringify( err ), 'error', this.constructor.NAME);
+
+          } else {
+            callback && callback( err, documents );
+          }
+        }
       );
     },
 
@@ -357,20 +375,21 @@ YUI.add('model-sync-couchdb', function (Y) {
     Query a specific view for a list of documents.
 
     @method _queryView
-    @param {String} viewName
+    @param {String} design
+    @param {String} view
     @param {Object} options
     @param {Function} callback
       @param {Object} doc
     @protected
     **/
-    _queryView: function(viewName, options, callback) {
-      var view = this.constructor.NAME + '/' + viewName;
+    _queryView: function(design, view, options, callback) {
+      if (!design || !view) return;
 
       this._db.view(
         viewName,
         function (err, documents) {
           if (err) {
-            Y.log('Error querying ' + view + ': ' + err, 'error', this.constructor.NAME);
+            Y.log('Error querying ' + view + ': ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
             callback && callback( documents );

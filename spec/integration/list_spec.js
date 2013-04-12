@@ -29,11 +29,13 @@ describe('a list of documents', function () {
 
         databaseName: databaseName,
 
+        listAllViewPath: 'breeds/all',
+
         designDocuments: {
           breeds: {
             all: {
               map: function (doc) {
-                if (doc.breed) emit(doc.breed, doc);
+                if (doc.name) emit(doc.name, doc);
               }
             }
           }
@@ -93,8 +95,8 @@ describe('a list of documents', function () {
   describe('can be read', function () {
     beforeEach(function () {
       spyOn( subject, '_queryAll' ).andCallThrough();
-      spyOn( subject, '_queryView' ).andCallThrough();
-      spyOn( subject, 'parse' ).andCallThrough();
+      spyOn( subject, '_parse' ).andCallThrough();
+      spyOn( subject, 'reset' ).andCallThrough();
 
       callback = jasmine.createSpy();
 
@@ -113,20 +115,94 @@ describe('a list of documents', function () {
       jasmine.any(Function));
     });
 
-    it('calls `_queryView', function () {
-      expect( subject._queryView ).toHaveBeenCalledWith(
-      'all',
-      {
-        // no options
-      },
-      jasmine.any(Function));
+    it('parses the list of documents', function () {
+      expect( subject._parse ).toHaveBeenCalledWith(
+      // @note we've got duplicate documents because
+      // we're on the second iteration of the creation.
+      [{
+        id: jasmine.any(String),
+        key: 'Mr. Fribbles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-4fbc6f6d5463a701c0080ec73840586b',
+          name: 'Mr. Fribbles'
+        }
+      }, {
+        id: jasmine.any(String),
+        key: 'Mr. Fribbles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-4fbc6f6d5463a701c0080ec73840586b',
+          name: 'Mr. Fribbles'
+        }
+      }, {
+        id: jasmine.any(String),
+        key: 'Sprinkles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-7247ed5a878f3254c2e9f2fefcd02d0c',
+          name: 'Sprinkles'
+        }
+      }, {
+        id: jasmine.any(String),
+        key: 'Sprinkles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-7247ed5a878f3254c2e9f2fefcd02d0c',
+          name: 'Sprinkles'
+        }
+      }, {
+        id: jasmine.any(String),
+        key: 'Toodles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-9ddcea6c4be659d50a600cf1218e0b41',
+          name: 'Toodles'
+        }
+      }, {
+        id: jasmine.any(String),
+        key: 'Toodles',
+        value: {
+          _id: jasmine.any(String),
+          _rev: '1-9ddcea6c4be659d50a600cf1218e0b41',
+          name: 'Toodles'
+        }
+      }]
+      );
     });
 
-    it('parses the list of documents', function () {
-      expect( subject.parse ).toHaveBeenCalledWith({
-        pickles: 'yum'
-      });
-    });
+    it('resets the subject', function () {
+      expect( subject.reset ).toHaveBeenCalledWith(
+      [{
+        _id: jasmine.any(String),
+        _rev: '1-4fbc6f6d5463a701c0080ec73840586b',
+        name: 'Mr. Fribbles'
+      }, {
+        _id: jasmine.any(String),
+        _rev: '1-4fbc6f6d5463a701c0080ec73840586b',
+        name: 'Mr. Fribbles'
+      }, {
+        _id: jasmine.any(String),
+        _rev: '1-7247ed5a878f3254c2e9f2fefcd02d0c',
+        name: 'Sprinkles'
+      }, {
+        _id: jasmine.any(String),
+        _rev: '1-7247ed5a878f3254c2e9f2fefcd02d0c',
+        name: 'Sprinkles'
+      }, {
+        _id: jasmine.any(String),
+        _rev: '1-9ddcea6c4be659d50a600cf1218e0b41',
+        name: 'Toodles'
+      }, {
+        _id: jasmine.any(String),
+        _rev: '1-9ddcea6c4be659d50a600cf1218e0b41',
+        name: 'Toodles'
+      }],
+      {
+        // no options
+      }
+      );
+    })
   });
 
   describe('can be updated', function () {
