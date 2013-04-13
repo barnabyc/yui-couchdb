@@ -23,7 +23,8 @@ describe('reading', function () {
       {
 
         databaseName: 'felines',
-        model: Kitten
+        model: Kitten,
+        listAllViewPath: 'breeds/all'
 
       });
 
@@ -85,7 +86,6 @@ describe('reading', function () {
       });
 
       spyOn( subject, '_queryAll' ).andCallThrough();
-      spyOn( subject, '_queryView' ).andCallThrough();
 
       subject._conn = jasmine.createSpy();
 
@@ -107,19 +107,9 @@ describe('reading', function () {
     });
 
     describe('via a view', function () {
-      it('calls `_queryView` with the default ALL_VIEW_NAME', function () {
-        expect( subject._queryView ).toHaveBeenCalledWith(
-          'all',
-          {
-            // no options passed
-          },
-          jasmine.any(Function)
-        );
-      });
-
       it('calls database.view', function () {
         expect( subject._db.view ).toHaveBeenCalledWith(
-          'all',
+          'breeds/all',
           jasmine.any(Function)
         );
       });
@@ -141,12 +131,19 @@ describe('reading', function () {
         exists: jasmine.createSpy()
       };
 
-      subject._queryView('characters');
+      subject._queryView(
+        'breeds',
+        'all',
+        {
+          // no options
+        },
+        function () {}
+      );
     });
 
     it('calls database.view', function () {
       expect( subject._db.view ).toHaveBeenCalledWith(
-        'characters',
+        'breeds/all',
         jasmine.any(Function)
       );
     });

@@ -386,7 +386,7 @@ YUI.add('model-sync-couchdb', function (Y) {
       if (!design || !view) return;
 
       this._db.view(
-        viewName,
+        design + '/' + view, // @todo join cleaner; or accept path
         function (err, documents) {
           if (err) {
             Y.log('Error querying ' + view + ': ' + JSON.stringify( err ), 'error', this.constructor.NAME);
