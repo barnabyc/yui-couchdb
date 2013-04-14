@@ -379,20 +379,30 @@ YUI.add('model-sync-couchdb', function (Y) {
     @param {String} view
     @param {Object} options
     @param {Function} callback
-      @param {Object} doc
+      @param {Object} err
+      @param {Object} documents
     @protected
     **/
-    _queryView: function(design, view, options, callback) {
-      if (!design || !view) return;
+    _queryView: function(options, callback) {
+      var viewPath;
+
+      if (options.path) {
+        viewPath = options.path;
+      }
+      else if (options.design && options.view) {
+        viewPath = options.design + '/' + options.view;
+      }
+
+      if (!viewPath) return;
 
       this._db.view(
-        design + '/' + view, // @todo join cleaner; or accept path
+        viewPath,
         function (err, documents) {
           if (err) {
             Y.log('Error querying ' + view + ': ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( documents );
+            callback && callback( err, documents );
           }
         }
       );

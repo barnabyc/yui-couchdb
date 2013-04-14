@@ -130,22 +130,43 @@ describe('reading', function () {
         view  : jasmine.createSpy(),
         exists: jasmine.createSpy()
       };
-
-      subject._queryView(
-        'breeds',
-        'all',
-        {
-          // no options
-        },
-        function () {}
-      );
     });
 
-    it('calls database.view', function () {
-      expect( subject._db.view ).toHaveBeenCalledWith(
-        'breeds/all',
-        jasmine.any(Function)
-      );
+    describe('with a path', function () {
+      beforeEach(function () {
+        subject._queryView(
+          {
+            path: 'breeds/all'
+          },
+          function () {}
+        );
+      });
+
+      it('calls database.view', function () {
+        expect( subject._db.view ).toHaveBeenCalledWith(
+          'breeds/all',
+          jasmine.any(Function)
+        );
+      });
+    });
+
+    describe('with design and view', function () {
+      beforeEach(function () {
+        subject._queryView(
+          {
+            design: 'breeds',
+            view  : 'all'
+          },
+          function () {}
+        );
+      });
+
+      it('calls database.view', function () {
+        expect( subject._db.view ).toHaveBeenCalledWith(
+          'breeds/all',
+          jasmine.any(Function)
+        );
+      });
     });
   });
 
