@@ -375,24 +375,28 @@ YUI.add('model-sync-couchdb', function (Y) {
     Query a specific view for a list of documents.
 
     @method _queryView
-    @param {String} design
-    @param {String} view
-    @param {Object} options
+    @param {Object} [options] Query options
+      @param {String} [options.path] The direct path to the view in question
+      @param {String} [options.design] The design which holds the view
+      @param {String} [options.view] The view name
     @param {Function} callback
-      @param {Object} err
-      @param {Object} documents
+      @param {Object|null} callback.err An error object
+      @param {Array[Object]} callback.documents Response of the query
     @protected
     **/
     _queryView: function(options, callback) {
       var viewPath;
 
-      if (options.path) {
-        viewPath = options.path;
-      }
-      else if (options.design && options.view) {
-        viewPath = options.design + '/' + options.view;
+      if (options) {
+        if (options.path) {
+          viewPath = options.path;
+        }
+        else if (options.design && options.view) {
+          viewPath = options.design + '/' + options.view;
+        }
       }
 
+      // @todo throw error more clearly
       if (!viewPath) return;
 
       this._db.view(
