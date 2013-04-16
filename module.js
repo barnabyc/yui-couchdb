@@ -72,6 +72,17 @@ YUI.add('model-sync-couchdb', function (Y) {
     databaseName: '',
 
     /**
+    The path within a design to a view to be used for ModelList
+    `all` queries.
+
+    @property listAllViewPath
+    @default null
+    @type {String|null}
+    @example 'breeds/all'
+    **/
+    listAllViewPath: null,
+
+    /**
     Specifies a design document for creation.
 
     @property designDocuments
@@ -85,9 +96,8 @@ YUI.add('model-sync-couchdb', function (Y) {
     initializer: function (config) {
       Y.log('YEAH! COUCH IN DA HOUSE!', 'debug', this.constructor.NAME);
 
-      // Extend the subclass instance
-      // with `save` and `_parse` if
-      // a ModelList.
+      // Extend ModelList subclass instances
+      // with `save` and `_parse`.
       //
       if (this._isYUIModelList) {
         this.save   = this._saveModelList;
@@ -116,9 +126,7 @@ YUI.add('model-sync-couchdb', function (Y) {
       * `update`: Update an existing model.
       * `delete`: Delete an existing model.
 
-    @param {Object} [options] Sync options:
-      @param ...
-      @param ...
+    @param {Object} [options] sync options
     @param {Function} [callback] Called when the sync operation finishes.
       @param {Error|null} callback.err If an error occurred, this parameter will
         contain the error. If the sync operation succeeded, _err_ will be
@@ -181,19 +189,18 @@ YUI.add('model-sync-couchdb', function (Y) {
     },
 
     /**
-    SO WE MEET AGAIN
+    Extend ModelList subclasses with a `_parse` method
+    to handle `all` view list responses.
 
     @method _parseModelList
+    @param {Object} response
     @protected
     **/
     _parseModelList: function (response) {
       var massaged;
 
-      if (response instanceof Array) {
-        // @todo split this out
-        massaged = response.map(function (doc) {
-          return doc;
-        });
+      if (typeof response.toArray === 'function') {
+        massaged = response.toArray();
       }
 
       return this.parse(massaged);
@@ -209,9 +216,10 @@ YUI.add('model-sync-couchdb', function (Y) {
       delete whenever possible.
 
     @method _deleteDocument
-    @param {Object} options
-    @param {Function} callback
-      @param {Object} response
+    @param {Object} [options]
+    @param {Function} [callback]
+      @param {Object|null} callback.err
+      @param {Object} callback.response
     @protected
     **/
     _deleteDocument: function (options, callback) {
@@ -222,7 +230,7 @@ YUI.add('model-sync-couchdb', function (Y) {
             Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( response );
+            callback && callback( err, response );
           }
         }
       );
@@ -232,12 +240,14 @@ YUI.add('model-sync-couchdb', function (Y) {
     Remove a revision of a document from the database.
 
     @method _deleteRevision
-    @param {Object} options
-    @param {Function} callback
-      @param {Object} response
+    @param {Object} [options]
+    @param {Function} [callback]
+      @param {Object|null} callback.err
+      @param {Object} callback.response
     @protected
     **/
     _deleteRevision: function (options, callback) {
+      // @todo ensure we have a revision
       this._db.remove(
         this.get('id'),
         this.get('revision'),
@@ -246,7 +256,7 @@ YUI.add('model-sync-couchdb', function (Y) {
             Y.log('Error deleteing revision: ' + err, 'error', this.constructor.NAME);
 
           } else {
-            callback && callback( response );
+            callback && callback( err, response );
           }
         }
       );
@@ -256,9 +266,10 @@ YUI.add('model-sync-couchdb', function (Y) {
     Remove a list of documents from the database.
 
     @method _deleteList
-    @param {Object} options
-    @param {Function} callback
-      @param {Object} response
+    @param {Object} [options]
+    @param {Function} [callback]
+      @param {Object|null} callback.err
+      @param {Object} callback.response
     @protected
     **/
     _deleteList: function (options, callback) {
@@ -269,9 +280,10 @@ YUI.add('model-sync-couchdb', function (Y) {
     Create a single new document.
 
     @method _createDocument
-    @param {Object} options
-    @param {Function} callback
-      @param {Object} response
+    @param {Object} [options]
+    @param {Function} [callback]
+      @param {Object|null} callback.err
+      @param {Object} callback.doc
     @protected
     **/
     _createDocument: function (options, callback) {
@@ -296,7 +308,8 @@ YUI.add('model-sync-couchdb', function (Y) {
     @method _fetchDocument
     @param {Object} options
     @param {Function} callback
-      @param {Object} doc
+      @param {Object|null} callback.err
+      @param {Object} callback.doc
     @protected
     **/
     _fetchDocument: function (options, callback) {
@@ -396,7 +409,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         }
       }
 
-      // @todo throw error more clearly
+      // @todo throw error more gracefully
       if (!viewPath) return;
 
       this._db.view(
