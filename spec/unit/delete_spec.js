@@ -83,31 +83,36 @@ describe('deleting', function () {
   });
 
   describe('a list of documents', function () {
+    var model1, model2, model3;
+
     beforeEach(function () {
-      subject = new KittenList({
-        items: [
-          {
-            id    : 123,
-            name  : 'Sparkles',
-            gender: 'female',
-            age   : 3
-          },
-          {
-            id    : 456,
-            name  : 'Tinkles',
-            gender: 'female',
-            age   : 4
-          },
-          {
-            id    : 789,
-            name  : 'Ernest',
-            gender: 'male',
-            age   : 5
-          }
-        ]
+      model1 = new Kitten({
+        id    : 123,
+        name  : 'Sparkles',
+        gender: 'female',
+        age   : 3
       });
 
-      spyOn( subject, '_deleteList' ).andCallThrough();
+      model2 = new Kitten({
+        id    : 456,
+        name  : 'Tinkles',
+        gender: 'female',
+        age   : 4
+      });
+      model3 = new Kitten({
+        id    : 789,
+        name  : 'Ernest',
+        gender: 'male',
+        age   : 5
+      });
+
+      subject = new KittenList({
+        items: [
+          model1,
+          model2,
+          model3
+        ]
+      });
 
       subject._conn = jasmine.createSpy();
 
@@ -116,17 +121,27 @@ describe('deleting', function () {
         exists: jasmine.createSpy()
       };
 
-      subject.delete({
+      spyOn( model1, 'destroy' ).andCallThrough();
+      spyOn( model2, 'destroy' ).andCallThrough();
+      spyOn( model3, 'destroy' ).andCallThrough();
+
+      subject.delete();
+    });
+
+    it('calls destroy for each list item', function () {
+      expect( model1.destroy ).toHaveBeenCalledWith({
+        remove: true
+      });
+      expect( model2.destroy ).toHaveBeenCalledWith({
+        remove: true
+      });
+      expect( model3.destroy ).toHaveBeenCalledWith({
         remove: true
       });
     });
 
-    it('calls `_deleteList`', function () {
-      expect( subject._deleteList ).toHaveBeenCalledWith([
-        123,
-        456,
-        789
-      ], jasmine.any(Function));
+    it('results in an empty list', function () {
+      expect( subject.isEmpty() ).toBe( true );
     });
   });
 
