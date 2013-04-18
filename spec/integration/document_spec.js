@@ -147,8 +147,40 @@ describe('a single document', function () {
     // @todo
   });
 
-  xdescribe('can be deleted', function () {
-    // @todo
+  describe('can be deleted', function () {
+    beforeEach(function () {
+      subject = new Kitten({
+        id: createdId
+      });
+
+      callback = jasmine.createSpy();
+
+      runs(function () {
+        subject.load();
+      });
+
+      waits(100);
+
+      runs(function () {
+        subject.destroy({
+          remove: true
+        });
+      });
+    });
+
+    it('is now destroyed', function () {
+      runs(function () {
+        expect( subject.get('destroyed') ).toBe( true );
+      });
+    });
+
+    it('calls `destroy` callback', function () {
+      runs(function () {
+        expect( callback ).toHaveBeenCalledWith({
+          foo: 'bar'
+        });
+      });
+    });
   });
 
 });

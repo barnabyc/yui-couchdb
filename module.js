@@ -227,7 +227,7 @@ YUI.add('model-sync-couchdb', function (Y) {
         this.get('id'),
         function (err, response) {
           if (err) {
-            Y.log('Error deleteing document: ' + err, 'error', this.constructor.NAME);
+            Y.log('Error deleteing document: ' + JSON.stringify( err ), 'error', this.constructor.NAME);
 
           } else {
             callback && callback( err, response );
