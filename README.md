@@ -109,7 +109,7 @@ Run via `jasmine-node`:
 
 ### Integrations
 
-Requires CouchDB server running locally
+Requires CouchDB server running locally (default port 5984)
 
     jasmine-node --verbose spec/integration/
 
