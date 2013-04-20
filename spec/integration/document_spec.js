@@ -143,8 +143,10 @@ describe('a single document', function () {
 
   });
 
-  xdescribe('can be updated', function () {
-    // @todo
+  describe('can be updated', function () {
+    it('updates successfully', function () {
+      expect( true ).toBe( false );
+    });
   });
 
   describe('can be deleted', function () {
