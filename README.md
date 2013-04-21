@@ -35,7 +35,6 @@ YUI.add('felines:kitten', function (Y) {
     ATTRS: { }
   });
 
-  // Expose API
   Y.namespace('Felines').Kitten = Kitten;
 
 },
@@ -68,6 +67,9 @@ YUI.add('canines:puppy_list', function (Y) {
     // The CouchDB database storing these documents
     databaseName: 'canines',
 
+    // Path to the below `all` view
+    listAllViewPath: 'breeds/all',
+
     // An `all` design document view to allow querying for a list
     designDocument: {
       breeds: {
@@ -84,7 +86,6 @@ YUI.add('canines:puppy_list', function (Y) {
     ATTRS: { }
   });
 
-  // Expose API
   Y.namespace('Canines').PuppyList = PuppyList;
 
 },
