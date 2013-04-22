@@ -317,14 +317,11 @@ YUI.add('model-sync-couchdb', function (Y) {
 
       this._db.get(
         this.get('id'),
-        function (err, doc) {
-          if (err) {
-            Y.log('Error querying ' + view + ': ' + err, 'error', this.constructor.NAME);
-
-          } else {
-            callback && callback( err, doc );
-          }
-        }
+        Y.bind(
+          this._syncResponseHandler,
+          this,
+          callback
+        )
       );
     },
 
@@ -500,6 +497,26 @@ YUI.add('model-sync-couchdb', function (Y) {
             docs[ docName ]
           );
         }
+      }
+    },
+
+    /**
+    Generic response handler.
+
+    @method _syncResponseHandler
+    @param {Function} callback
+    @param {Object|null} error
+      Any error details that may have occurred during the sync operation.
+    @param {Object|null} response
+      A single document or an array of documents successfully retreived.
+    @protected
+    **/
+    _syncResponseHandler: function (callback, error, response) {
+      if (error) {
+        Y.log('Error fetching ' + JSON.stringify( this ) + ': ' + JSON.stringify( error ), 'error', this.constructor.NAME);
+
+      } else {
+        callback && callback( error, response );
       }
     }
 

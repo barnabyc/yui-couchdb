@@ -150,39 +150,73 @@ describe('a single document', function () {
   });
 
   describe('can be deleted', function () {
-    beforeEach(function () {
-      subject = new Kitten({
-        id: createdId
+    describe('from the client', function () {
+      beforeEach(function () {
+        var callbackFired = false,
+            callback = function () {
+              debugger;
+              callbackFired = true;
+            };
+
+        subject = new Kitten({
+          id: createdId
+        });
+
+        runs(function () {
+          subject.load();
+        });
+
+        waits(100);
+
+        runs(function () {
+          subject.destroy(
+          {
+            remove: true
+          },
+          callback);
+        });
+
+        waitsFor(function () {
+          return callbackFired;
+        }, 'Destroy callback never fired', 5000);
       });
 
-      callback = jasmine.createSpy();
-
-      runs(function () {
-        subject.load();
-      });
-
-      waits(100);
-
-      runs(function () {
-        subject.destroy({
-          remove: true
+      it('is now destroyed on the client', function () {
+        runs(function () {
+          expect( subject.get('destroyed') ).toBe( true );
         });
       });
     });
 
-    it('is now destroyed', function () {
-      runs(function () {
-        expect( subject.get('destroyed') ).toBe( true );
-      });
-    });
+    describe('from the database', function () {
+      beforeEach(function () {
+        subject = new Kitten({
+          id: createdId
+        });
 
-    it('calls `destroy` callback', function () {
-      runs(function () {
-        expect( callback ).toHaveBeenCalledWith({
-          foo: 'bar'
+        spyOn( subject, '_syncResponseHandler' );
+
+        runs(function () {
+          subject.load();
+        });
+
+        waits(100);
+      });
+
+      it('does not exist in the database', function () {
+        runs(function () {
+          expect( subject._syncResponseHandler ).toHaveBeenCalledWith(
+            jasmine.any(Function),
+            {
+              error : 'not_found',
+              reason: 'deleted'
+            },
+            undefined
+          );
         });
       });
     });
+
   });
 
 });
