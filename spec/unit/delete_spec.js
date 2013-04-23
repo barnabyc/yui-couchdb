@@ -125,7 +125,7 @@ describe('deleting', function () {
       spyOn( model2, 'destroy' ).andCallThrough();
       spyOn( model3, 'destroy' ).andCallThrough();
 
-      subject.delete();
+      subject.destroy();
     });
 
     it('calls destroy for each list item', function () {
