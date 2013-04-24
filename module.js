@@ -44,6 +44,7 @@ YUI.add('model-sync-couchdb', function (Y) {
   CouchDBSync._NON_ATTRS_CFG = [
     "setup",
     "databaseName",
+    "listAllViewPath",
     "designDocuments"
   ];
 
