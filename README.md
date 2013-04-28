@@ -30,7 +30,7 @@ YUI.add('felines:kitten', function (Y) {
   {
 
     // The CouchDB database storing these documents
-    databaseName: 'felines',
+    databaseName: 'felines'
 
   },
   {
