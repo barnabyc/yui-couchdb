@@ -8,7 +8,7 @@ Provides a sync layer for YUI Model and ModelList to a CouchDB database.
 
 Currently only supports nodejs environments as it depends on the Cradle npm module: https://npmjs.org/package/cradle
 
-_Definitely not production-ready yet!!_
+_Definitely still a work in progress; production usage not advised_
 
 ### Usage
 
